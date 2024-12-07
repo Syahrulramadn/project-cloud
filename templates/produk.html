@@ -83,6 +83,7 @@
 
       .card {
         border: none;
+        box-shadow: 4px 8px 4px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
         border-radius: 10px;
       }
@@ -95,7 +96,7 @@
         height: 200px;
         object-fit: contain;
         padding: 10px;
-        background-color: #d3d3d3;
+        background-color: #e9e9e9;
         border-radius: 10px;
       }
 
@@ -258,13 +259,6 @@
               <div class="card-body">
                 <h5 class="card-title">{{ product.nama_produk }}</h5>
                 <p class="card-text">{{ product.deskripsi }}</p>
-                <!-- <p class="card-text">Pilih Dus dan Harga:</p>
-                            <ul class="list-unstyled">
-                                {% for dus_harga in product.dus_harga %}
-                                <li class="card-text">{{ dus_harga.hargaPerPcs }} /pcs ({{ dus_harga.total_dus }}) = Rp {{
-                                    dus_harga.total_harga }}</li>
-                                {% endfor %}
-                            </ul> -->
                 <div class="btn-tgh">
                   <a
                     href="{{ url_for('pemesanan', produk_id=product._id) }}"

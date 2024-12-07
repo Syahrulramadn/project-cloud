@@ -12,9 +12,10 @@ html, body {
   height: 100%;
 }
 :root {
-  --primary-color: #2563eb;
-  --secondary-color: #1e40af;
+  --primary-color: #ffd700;
+  --secondary-color: #ffec3d;
   --background-color: #f8fafc;
+  --dark:#262626;
 }
 
 
@@ -39,7 +40,7 @@ html, body {
   font-size: 1.5rem;
 }
 .nama-usaha span{
-  color: #ffd700;
+  color: var(--primary-color);
   font-style: italic;
 }
 
@@ -70,7 +71,7 @@ html, body {
   left: 50%; /* Start di tengah */
   width: 0%; /* Garis tidak terlihat pada awalnya */
   height: 2px; /* Tebal garis */
-  background-color: #ffd700; /* Warna garis */
+  background-color: var(--primary-color); /* Warna garis */
   transform: translateX(-50%); /* Posisi dari tengah */
   transition: width 0.3s ease; /* Animasi lebar garis */
 }
@@ -84,12 +85,24 @@ html, body {
   width: 60%; /* Garis akan meluas saat hover */
 }
 
+.modal-body .btn-outline-warning {
+  
+  color: var(--dark);
+  border: 1px solid var(--primary-color);
+}
+
+.modal-body .btn-outline-warning:hover {
+  background-color: var(--primary-color);
+  color: black;
+}
+
 
 
 
 
 body {
   background-color: var(--background-color);
+  
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
@@ -99,12 +112,17 @@ body {
 
 .image-placeholder {
   position: relative;
-  background: linear-gradient(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+  background: linear-gradient(to right, var(--dark), var(--primary-color));
   background-image: url(/static/gambar/login.jpg);
   background-size: cover;
   /* background-position: center; */
-  position: relative;
   overflow: hidden;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #dee2e6;
 }
 
 .image-placeholder::before {
@@ -127,7 +145,7 @@ body {
   box-sizing: border-box;
   background: white;
   border-radius: 1rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .form-container h2 {
@@ -158,6 +176,7 @@ body {
 
 .btn-primary {
   background-color: var(--primary-color);
+  color: var(--dark);
   border: none;
   padding: 0.75rem;
   font-weight: 500;
@@ -167,6 +186,7 @@ body {
 
 .btn-primary:hover {
   background-color: var(--secondary-color);
+  color: black;
   transform: translateY(-1px);
 }
 
@@ -179,41 +199,16 @@ body {
   margin-bottom: 1rem;
 }
 
-.login-link {
-  color: var(--primary-color);
+.text-center .text {
+  color: #d0ad00;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
-.login-link:hover {
-  color: var(--secondary-color);
+.text-center .text:hover {
   text-decoration: underline;
 }
-
-/* @media (max-width: 991.98px) {
-  .form-container {
-      padding: 1.5rem;
-  }
-} */
-
-/* Common styles for both pages */
-/* .login-container,
-.register-container {
-  min-height: 100vh;
-} */
-
-.image-placeholder {
-  
-  background-size: cover;
-  background-color: #f0f0f0;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #dee2e6;
-}
-
 
 .form-control:focus {
   box-shadow: 0 0 0 0.2rem rgba(74, 74, 74, 0.25);
