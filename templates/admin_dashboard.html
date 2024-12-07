@@ -15,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <script src="../static/script.js"></script>
     <title>Admin Dashboard | Aprilion Printing</title>
     <style>
       /* Custom Flash Messages Styling */
@@ -133,37 +133,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const flashContainer = document.querySelector(
-            ".flash-messages-container"
-          );
-          const flashAlerts = document.querySelectorAll(".flash-alert");
-  
-          if (flashContainer && flashAlerts.length > 0) {
-            // Tampilkan container dan alert
-            setTimeout(() => {
-              flashContainer.classList.add("show");
-  
-              flashAlerts.forEach((alert, index) => {
-                setTimeout(() => {
-                  alert.classList.add("show", "visible");
-                }, index * 200);
-              });
-            }, 100);
-  
-            // Sembunyikan alert
-            flashAlerts.forEach((alert) => {
-              setTimeout(() => {
-                alert.classList.remove("show", "visible");
-  
-                setTimeout(() => {
-                  flashContainer.classList.remove("show");
-                }, 500);
-              }, 5000);
-            });
-          }
-        });
-        
       $(document).ready(function() {
           $.ajax({
               url: '/totals',

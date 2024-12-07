@@ -14,6 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/style.css">
+    <script src="../static/script.js"></script>
     <style>
         .profile-container {
             max-width: 500px;
@@ -280,38 +281,7 @@
     {% include 'footer.html' %}
     <!-- footer end -->
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const flashContainer = document.querySelector(
-            ".flash-messages-container"
-          );
-          const flashAlerts = document.querySelectorAll(".flash-alert");
-  
-          if (flashContainer && flashAlerts.length > 0) {
-            // Tampilkan container dan alert
-            setTimeout(() => {
-              flashContainer.classList.add("show");
-  
-              flashAlerts.forEach((alert, index) => {
-                setTimeout(() => {
-                  alert.classList.add("show", "visible");
-                }, index * 200);
-              });
-            }, 100);
-  
-            // Sembunyikan alert
-            flashAlerts.forEach((alert) => {
-              setTimeout(() => {
-                alert.classList.remove("show", "visible");
-  
-                setTimeout(() => {
-                  flashContainer.classList.remove("show");
-                }, 500);
-              }, 5000);
-            });
-          }
-        });
-      </script>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>

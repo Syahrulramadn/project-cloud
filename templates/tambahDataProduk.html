@@ -16,6 +16,8 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
       rel="stylesheet"
     />
+    <script src="../static/script.js"></script>
+    
     <!-- Custom CSS -->
     <style>
         body {
@@ -258,37 +260,6 @@
                 $(this).closest('.dus-group').remove();
             });
         });
-
-        document.addEventListener("DOMContentLoaded", function () {
-        const flashContainer = document.querySelector(
-          ".flash-messages-container"
-        );
-        const flashAlerts = document.querySelectorAll(".flash-alert");
-
-        if (flashContainer && flashAlerts.length > 0) {
-          // Tampilkan container dan alert
-          setTimeout(() => {
-            flashContainer.classList.add("show");
-
-            flashAlerts.forEach((alert, index) => {
-              setTimeout(() => {
-                alert.classList.add("show", "visible");
-              }, index * 200);
-            });
-          }, 100);
-
-          // Sembunyikan alert
-          flashAlerts.forEach((alert) => {
-            setTimeout(() => {
-              alert.classList.remove("show", "visible");
-
-              setTimeout(() => {
-                flashContainer.classList.remove("show");
-              }, 500);
-            }, 5000);
-          });
-        }
-      });
     </script>
 </body>
 </html>
