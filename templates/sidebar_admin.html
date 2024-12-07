@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Aprilion Printing" />
+  <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+  <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+  <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+  <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!-- Font Awesome CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="../static/css/style.css">
+
+  <title>Admin Sidebar</title>
+  <style>
+    .sidebar {
+      width: 250px;
+      transition: width 0.3s;
+      display: flex;
+      flex-direction: column; /* Mengatur item di dalam sidebar secara vertikal */
+      justify-content: space-between; /* Memberikan jarak antara item atas dan bawah */
+      height: 100vh; /* Mengatur tinggi sidebar menjadi 100% dari viewport */
+      background-color: #262626;
+    }
+    hr{
+      margin: 0.3rem;
+    }
+    .sidebar.collapsed {
+      width: 80px;
+    }
+    .sidebar .nav-link {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      transition: background-color 0.3s, color 0.3s;
+      color: #e9e9e9;
+    }
+    /* .sidebar .nav-link:hover {
+      background-color: #0d6efd;
+      color: white;
+    } */
+    
+    .sidebar .dropdown .nav-link:hover{
+      background-color: rgb(195, 0, 0);
+      border-radius: 5px;
+      color: white;
+    }
+    .sidebar > .nav-link >.logo {
+      width: 50px;
+      height: 50px;
+    }
+    .sidebar .nav-link .link {
+      width: 25px;
+      height: 25px;
+      filter: brightness(0) saturate(100%) invert(92%) sepia(18%) saturate(0%) hue-rotate(253deg) brightness(99%) contrast(94%);
+      transition: width 0.3s, height 0.3s, filter 0.3s;
+    }
+    .sidebar .nav-link .logo {
+      width: 50px;
+      height: 50px;
+    }
+    .sidebar .nav-link span {
+      margin-left: 10px;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .sidebar.collapsed .nav-link .link {
+      width: 25px;
+      height: 25px;
+      margin: 0;
+    }
+
+    .sidebar.collapsed .nav-link .logo {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto;
+    }
+    .sidebar.collapsed .nav-link span {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .sidebar .nav-link.active {
+      background-color: #0d6efd;
+      color: white;
+    }
+    .sidebar .nav-link.active img {
+      filter: grayscale(0%) invert(1);
+    }
+    .main-content {
+      transition: margin-left 0.3s;
+      margin-left: 250px;
+      width: calc(100% - 250px);
+    }
+    .main-content.collapsed {
+      margin-left: 80px;
+      width: calc(100% - 80px);
+    }
+  </style>
+</head>
+<body>
+  <div class="d-flex">
+    <div id="sidebar" class="sidebar d-flex flex-column flex-shrink-0 p-2">
+      <ul class="nav nav-pills flex-column mb-auto text-center text-sm-start">
+        <li class="garis-logo">
+          <a href="#" id="toggle-link" class="nav-link py-2">
+            <img class="logo" src="../static/gambar/logo.png" alt="">
+            <span class="fw-bold" style="color: #e9e9e9;">Aprilion <em style="color: #ffd700;">Printing</em></span>
+          </a>
+        </li>
+        <hr style="color: #e9e9e9;">
+        <li>
+          <a href="/adminDashboard" id="dashboard-link" class="nav-link py-2">
+            <img class="link" src="../static/img/dashboard.svg" alt="">
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="/adminPelanggan" id="pelanggan-link" class="nav-link py-2">
+            <img class="link" src="../static/img/pelanggan.svg" alt="">
+            <span>Pelanggan</span>
+          </a>
+        </li>
+        <li>
+          <a href="/adminProduk" id="produk-link" class="nav-link py-2">
+            <img class="link" src="../static/img/produk.svg" alt="">
+            <span>Produk</span>
+          </a>
+        </li>
+        <li>
+          <a href="/adminDaftarPemesanan" id="pemesanan-link" class="nav-link py-2">
+            <img class="link" src="../static/img/pemesanan.svg" alt="">
+            <span>Pemesanan</span>
+          </a>
+        </li>
+        <li>
+          <a href="/adminPembayaran" id="pembayaran-link" class="nav-link py-2">
+            <img class="link" src="../static/img/pembayaran.svg" alt="">
+            <span>Pembayaran</span>
+          </a>
+        </li>
+        <li>
+          <a href="/adminDataAdmin" id="admin-link" class="nav-link py-2">
+            <img class="link" src="../static/img/admin.svg" alt="">
+            <span>Akun Admin</span>
+          </a>
+        </li>
+      </ul>
+      <div class="dropdown">
+        <a href="/admin/logout" id="keluar-link" class="nav-link py-2">
+          <img class="link" src="../static/img/box-arrow-right.svg" alt="" width="25" height="25">
+          <span>Keluar</span>
+        </a>
+      </div>
+    </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script>
+    document.getElementById('toggle-link').addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('sidebar').classList.toggle('collapsed');
+      document.querySelector('.main-content').classList.toggle('collapsed');
+    });
+
+    // Highlight active link
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>

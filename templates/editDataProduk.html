@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <title>Edit Produk | Aprilion Printing</title>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .edit-container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            margin-top: 50px;
+            max-width: 700px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #00B087;
+            box-shadow: 0 0 0 0.2rem rgba(0, 176, 135, 0.25);
+        }
+
+        .text-center .btn-save {
+            background-color: #00B087;
+            color: white;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .text-center .btn-save:hover {
+            background-color: #009370;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 176, 135, 0.3);
+        }
+
+        .current-image {
+            border-radius: 5px;
+            width: 150px;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-header {
+            color: #00B087;
+            border-bottom: 2px solid #00B087;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+    </style>
+</head>
+<body>
+    <!-- sidebar start -->
+    {% include 'sidebar_admin.html' %}
+    <!-- sidebar end -->
+
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert flash-alert alert-{{ category }} alert-dismissible fade" role="alert">
+                {% if category == 'success' %}
+                <i class="bi bi-check-circle-fill me-2"></i>
+                {% elif category == 'danger' %}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {% elif category == 'warning' %}
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                {% endif %}
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-7 edit-container">
+                <h2 class="text-center section-header mb-4">Edit Produk</h2>
+                <form action="/editDataProduk/{{data._id}}" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="kategori" class="form-label">Kategori</label>
+                        <select class="form-select" id="kategori" name="kategori" required>
+                            <option value="">Pilih Kategori</option>
+                            <option value="Print A3+" {% if data.kategori == 'Print A3+' %}selected{% endif %}>Print A3+</option>
+                            <option value="Label" {% if data.kategori == 'Label' %}selected{% endif %}>Label</option>
+                            <option value="Buku" {% if data.kategori == 'Buku' %}selected{% endif %}>Buku</option>
+                            <option value="Photobook" {% if data.kategori == 'Photobook' %}selected{% endif %}>Photobook</option>
+                            <option value="Souvenir" {% if data.kategori == 'Souvenir' %}selected{% endif %}>Souvenir</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="namaProduk" class="form-label">Nama Produk</label>
+                        <input type="text" class="form-control" id="namaProduk" name="namaProduk" required value="{{ data.nama_produk }}" placeholder="Masukkan nama produk">
+                    </div>
+                    <div class="mb-3">
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" required rows="3" placeholder="Masukkan deskripsi produk">{{ data.deskripsi }}</textarea>
+                    </div>
+                    
+                    <h5 class="section-header">Ukuran dan Harga</h5>
+                    {% for index in range(data.dus_harga|length) %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="ukuran" class="form-label">Ukuran {{index+1}}</label>
+                            <input type="text" class="form-control" id="ukuran{{ index }}" name="ukuran[]" required value="{{ data.dus_harga[index].ukuran }}" placeholder="Contoh: A4, A3+">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hargaPcs" class="form-label">Harga/Pcs</label>
+                            <div class="input-group">
+                            <span class="input-group-text">Rp</span>
+                            <input type="text" class="form-control" id="hargaPcs_{{ index }}" name="hargaPcs[]" required value="{{ data.dus_harga[index].hargaPcs }}" placeholder="Contoh: 50.000">
+                        </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="mb-3">
+                        <label for="photo" class="form-label">Upload Foto</label>
+                        <input type="file" class="form-control" id="photo" name="photo" accept=".png, .jpg, .jpeg">
+                        <img src="{{ url_for('static', filename='assets/imgProduk/' ~ data.photo) }}" alt="Current Image" class="img-fluid current-image mt-3">
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-save">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const flashContainer = document.querySelector(".flash-messages-container");
+            const flashAlerts = document.querySelectorAll(".flash-alert");
+
+            if (flashContainer && flashAlerts.length > 0) {
+                setTimeout(() => {
+                    flashContainer.classList.add("show");
+                    flashAlerts.forEach((alert, index) => {
+                        setTimeout(() => {
+                            alert.classList.add("show", "visible");
+                        }, index * 200);
+                    });
+                }, 100);
+
+                flashAlerts.forEach((alert) => {
+                    setTimeout(() => {
+                        alert.classList.remove("show", "visible");
+                        setTimeout(() => {
+                            flashContainer.classList.remove("show");
+                        }, 500);
+                    }, 5000);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

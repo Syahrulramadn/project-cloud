@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Edit Akun Admin | Aprilion Printing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            /* margin-top: 50px; */
+            transition: all 0.3s ease;
+        }
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+        }
+        .text-center .btn-warning {
+            /* background-color: #ffd700; */
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #262626;
+        }
+        .text-center .btn-warning:hover {
+            background-color: #ffd700;
+            transform: translateY(-2px);
+        }
+        .text-center .btn-danger {
+            padding: 8px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            border: none;
+        }
+        .text-center .btn-danger:hover{
+            transform: translateY(2px);
+        }
+
+        .password-section {
+            position: relative;
+        }
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 38px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar start -->
+    {% include 'sidebar_admin.html' %}
+    <!-- Sidebar end -->
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="form-container">
+            <h2 class="mb-4 text-center" style="color: #ffd700;">Edit Data Admin</h2>
+            <form action="{{ url_for('edit_data_admin', _id=data._id) }}" method="POST" id="adminForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nama Lengkap</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" id="name" name="name" 
+                               value="{{ data.name }}" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="{{ data.email }}" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password Baru</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password">
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <div id="passwordStrength" class="password-strength"></div>
+                    <small class="form-text text-muted">Kosongkan jika tidak ingin mengubah password</small>
+                </div>
+                <div class="d-grid gap-2 text-center">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-save me-2"></i>Perbarui
+                    </button>
+                    <a href="{{ url_for('adminDataAdmin') }}" class="btn btn-danger">
+                        <i class="bi bi-x-circle me-2"></i>Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput = document.getElementById('password');
+            const passwordStrength = document.getElementById('passwordStrength');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+
+            // Password Strength Indicator
+            // passwordInput.addEventListener('input', function() {
+            //     const password = this.value;
+            //     let strength = 'weak';
+            //     passwordStrength.className = 'password-strength';
+
+            //     if (password.length >= 8) {
+            //         if (/[A-Z]/.test(password) && /[a-z]/.test(password) && 
+            //             /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
+            //             strength = 'strong';
+            //             passwordStrength.classList.add('password-strong');
+            //         } else if (/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password)) {
+            //             strength = 'medium';
+            //             passwordStrength.classList.add('password-medium');
+            //         } else {
+            //             passwordStrength.classList.add('password-weak');
+            //         }
+            //     } else {
+            //         passwordStrength.classList.add('password-weak');
+            //     }
+            // });
+
+            // Password Toggle Visibility
+            togglePasswordBtn.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' 
+                    ? '<i class="bi bi-eye"></i>' 
+                    : '<i class="bi bi-eye-slash"></i>';
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

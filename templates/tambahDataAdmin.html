@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Tambah Data Admin</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f4f6f9;
+        font-family: "Arial", sans-serif;
+      }
+      .form-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        padding: 40px;
+        width: 100%;
+        max-width: 500px;
+        transition: all 0.3s ease;
+      }
+      .form-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+      .form-label {
+        font-weight: 600;
+        color: #495057;
+      }
+      .form-control {
+        border-radius: 8px;
+        padding: 12px;
+      }
+      .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      /* Enhanced Flash Messages */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+      .flash-messages-container.show {
+        right: 20px;
+      }
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+
+      /* Password Strength Indicator */
+      .password-strength {
+        height: 5px;
+        margin-top: 5px;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+
+      .text-center .btn-custom {
+        background-color: #00b087;
+        color: white;
+        transition: transform 0.3s ease;
+        padding: 8px;
+        border-radius: 8px;
+      }
+      .text-center .btn-custom:hover {
+        background-color: #009370;
+        transform: translateY(-2px);
+      }
+      .text-center .btn-danger {
+        transition: transform 0.3s ease;
+        padding: 8px;
+        border-radius: 8px;
+      }
+
+      .text-center .btn-danger:hover {
+        transform: translateY(2px);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar start -->
+    {% include 'sidebar_admin.html' %}
+    <!-- Sidebar end -->
+
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+        role="alert"
+      >
+        {% if category == 'success' %}
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {% elif category == 'danger' %}
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% elif category == 'warning' %}
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <div class="container d-flex justify-content-center align-items-center">
+      <div class="form-container">
+        <h3 class="mb-4 text-center" style="color: #009370">
+          Tambah Admin Baru
+        </h3>
+        <form
+          action="{{ url_for('tambah_data_admin') }}"
+          method="POST"
+          id="adminForm"
+        >
+          <div class="mb-3">
+            <label for="name" class="form-label">Nama Lengkap</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input
+                type="text"
+                class="form-control"
+                id="name"
+                name="name"
+                required
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-envelope"></i
+              ></span>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                required
+              />
+              <button
+                class="btn btn-outline-secondary"
+                type="button"
+                id="togglePassword"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+            <div id="passwordStrength" class="password-strength"></div>
+          </div>
+          <div class="mb-3">
+            <label for="confirm_password" class="form-label"
+              >Konfirmasi Password</label
+            >
+            <div class="input-group">
+              <span class="input-group-text"
+                ><i class="bi bi-lock-fill"></i
+              ></span>
+              <input
+                type="password"
+                class="form-control"
+                id="confirm_password"
+                name="confirm_password"
+                required
+              />
+            </div>
+          </div>
+          <div class="d-grid gap-2 text-center">
+            <button type="submit" class="btn btn-custom">
+              <i class="bi bi-save me-2"></i>Simpan
+            </button>
+            <a href="{{ url_for('adminDataAdmin') }}" class="btn btn-danger">
+              <i class="bi bi-x-circle me-2"></i>Batal
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashContainer = document.querySelector(
+          ".flash-messages-container"
+        );
+        const flashAlerts = document.querySelectorAll(".flash-alert");
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput =
+          document.getElementById("confirm_password");
+        const passwordStrength = document.getElementById("passwordStrength");
+        const togglePasswordBtn = document.getElementById("togglePassword");
+
+        // Flash Messages
+        if (flashContainer && flashAlerts.length > 0) {
+          setTimeout(() => {
+            flashContainer.classList.add("show");
+            flashAlerts.forEach((alert, index) => {
+              setTimeout(() => {
+                alert.classList.add("show", "visible");
+              }, index * 200);
+            });
+          }, 100);
+
+          flashAlerts.forEach((alert) => {
+            setTimeout(() => {
+              alert.classList.remove("show", "visible");
+              setTimeout(() => {
+                flashContainer.classList.remove("show");
+              }, 500);
+            }, 5000);
+          });
+        }
+
+        // Password Strength Indicator
+        // passwordInput.addEventListener('input', function() {
+        //     const password = this.value;
+        //     let strength = 'weak';
+        //     passwordStrength.className = 'password-strength';
+
+        //     if (password.length >= 8) {
+        //         if (/[A-Z]/.test(password) && /[a-z]/.test(password) &&
+        //             /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) {
+        //             strength = 'strong';
+        //             passwordStrength.classList.add('password-strong');
+        //         } else if (/[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password)) {
+        //             strength = 'medium';
+        //             passwordStrength.classList.add('password-medium');
+        //         } else {
+        //             passwordStrength.classList.add('password-weak');
+        //         }
+        //     } else {
+        //         passwordStrength.classList.add('password-weak');
+        //     }
+        // });
+
+        // Password Toggle Visibility
+        togglePasswordBtn.addEventListener("click", function () {
+          const type =
+            passwordInput.getAttribute("type") === "password"
+              ? "text"
+              : "password";
+          passwordInput.setAttribute("type", type);
+          this.innerHTML =
+            type === "password"
+              ? '<i class="bi bi-eye"></i>'
+              : '<i class="bi bi-eye-slash"></i>';
+        });
+
+        // Form Validation
+        // document.getElementById('adminForm').addEventListener('submit', function(e) {
+        //     if (passwordInput.value !== confirmPasswordInput.value) {
+        //         e.preventDefault();
+        //         alert('Password dan Konfirmasi Password tidak cocok!');
+        //     }
+        // });
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <title>Admin Metode Pembayaran | Aprilion Printing</title>
+    <style>
+      /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- sidebar start -->
+    {% include 'sidebar_admin.html' %}
+    <!-- sidebar end -->
+
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+        role="alert"
+      >
+        {% if category == 'success' %}
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {% elif category == 'danger' %}
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% elif category == 'warning' %}
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <div
+      class="container-fluid py-5"
+      style="background-color: #ffffff; border-radius: 30px"
+    >
+      <div class="row align-items-center px-3">
+        <div class="col-lg-9">
+          <h3 class="fw-bold">Daftar Metode Pembayaran</h3>
+        </div>
+        <div class="col-lg-3">
+          <!-- Button trigger modal -->
+          <button
+            onclick="window.location.href='/tambahDataPembayaran'"
+            type="button"
+            class="py-2 px-3 btn"
+            style="background-color: #00b087; color: white; border-radius: 8px"
+          >
+            <i class="bi bi-plus-circle"></i> Tambah Pembayaran
+          </button>
+        </div>
+      </div>
+
+      <div class="px-3">
+        <div class="p-3 mt-3">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Metode Pembayaran</th>
+                <th scope="col">Jenis Pembayaran</th>
+                <th scope="col">Nomor Pembayaran</th>
+                <th scope="col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in pembayaran %}
+              <tr>
+                <td>{{ data.metodePembayaran }}</td>
+                <td>{{ data.jenisPembayaran }}</td>
+                <td>{{ data.nomorPembayaran }}</td>
+                <td>
+                  <button
+                    onclick="window.location.href='/editDataPembayaran/{{ data._id }}';"
+                    class="btn btn-warning"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button
+                    onclick="window.location.href='/hapusDataPembayaran/{{ data._id }}';"
+                    class="btn btn-danger"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="d-flex justify-content-end">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                <li class="page-item {% if page == 1 %}disabled{% endif %}">
+                  <a
+                    class="page-link"
+                    href="/adminPembayaran?page={{ page - 1 }}"
+                    aria-label="Previous"
+                  >
+                    <span aria-hidden="true">&laquo;</span>
+                  </a>
+                </li>
+                {% for p in range(1, total_pages + 1) %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                  <a class="page-link" href="/adminPembayaran?page={{ p }}"
+                    >{{ p }}</a
+                  >
+                </li>
+                {% endfor %}
+                <li
+                  class="page-item {% if page == total_pages %}disabled{% endif %}"
+                >
+                  <a
+                    class="page-link"
+                    href="/adminPembayaran?page={{ page + 1 }}"
+                    aria-label="Next"
+                  >
+                    <span aria-hidden="true">&raquo;</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- hero section end -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashContainer = document.querySelector(
+          ".flash-messages-container"
+        );
+        const flashAlerts = document.querySelectorAll(".flash-alert");
+
+        if (flashContainer && flashAlerts.length > 0) {
+          // Tampilkan container dan alert
+          setTimeout(() => {
+            flashContainer.classList.add("show");
+
+            flashAlerts.forEach((alert, index) => {
+              setTimeout(() => {
+                alert.classList.add("show", "visible");
+              }, index * 200);
+            });
+          }, 100);
+
+          // Sembunyikan alert
+          flashAlerts.forEach((alert) => {
+            setTimeout(() => {
+              alert.classList.remove("show", "visible");
+
+              setTimeout(() => {
+                flashContainer.classList.remove("show");
+              }, 500);
+            }, 5000);
+          });
+        }
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </body>
+</html>

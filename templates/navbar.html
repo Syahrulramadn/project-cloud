@@ -1,0 +1,181 @@
+<nav
+  class="navbar navbar-expand-lg navbar-dark"
+  style="background-color: #212529"
+>
+  <div class="container">
+    <!-- Logo and Brand -->
+    <a class="navbar-brand d-flex align-items-center" href="/">
+      <img
+        src="/static/gambar/logo.png"
+        alt="Logo"
+        width="50"
+        height="50"
+        class="d-inline-block align-text-top"
+      />
+      <h2 class="ms-2 nama-usaha">Aprilion<span> Printing</span></h2>
+    </a>
+
+    <!-- Toggle Button for Mobile -->
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Beranda</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/about">Tentang</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/produk">Produk</a>
+        </li>
+        {% if logged_in %}
+        <li class="nav-item dropdown">
+          <a
+            href="#"
+            class="d-block nav-link text-decoration-none"
+            id="dropdownUser1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <img
+              src="{{ url_for('static', filename=user_photo) }}"
+              alt="Foto Profil"
+              width="40"
+              height="40"
+              class="rounded-circle me-1"
+            />
+            <span
+              class="d-none d-lg-inline-flex username-text"
+              style="color: white"
+              >{{ user_name }}</span>
+          </a>
+          <ul
+            class="dropdown-menu text-small dropdown-menu-center"
+            aria-labelledby="dropdownUser1"
+          >
+            <li><a class="dropdown-item" href="/profil">Profil</a></li>
+
+            <li>
+              <a href="{{ url_for('riwayat_pemesanan') }}" class="dropdown-item"
+                >Riwayat Pemesanan</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('logout') }}" class="dropdown-item">Keluar</a>
+            </li>
+          </ul>
+        </li>
+
+        {% else %}
+        <li class="nav-item ms-2">
+          <button
+            type="button"
+            class="btn btn-success"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Masuk
+          </button>
+        </li>
+        <li class="nav-item ms-2">
+          <a href="/register" class="btn btn-light">Daftar</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Masuk Sebagai</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div
+          class="modal-body d-flex align-items-center justify-content-center"
+        >
+          <a
+            href="/admin/login"
+            class="btn btn-outline-success btn-lg me-2"
+            style="width: 50%"
+            >Admin</a
+          >
+          <a
+            href="/login"
+            class="btn btn-outline-success btn-lg"
+            style="width: 50%"
+            >Pelanggan</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Desktop styles */
+  .navbar {
+    padding: 1rem 0;
+  }
+
+  .nav-link {
+    padding: 0.5rem 1rem !important;
+    font-weight: 500;
+  }
+
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  }
+  .btn-light a {
+    color: black;
+  }
+
+  .logout a {
+    color: white;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 991px) {
+    .navbar-collapse {
+      padding: 1rem 0;
+    }
+
+    .navbar-nav {
+      gap: 0.5rem;
+    }
+
+    .nav-item:last-child {
+      margin-top: 0.5rem;
+    }
+
+    .btn-danger {
+      width: 100%;
+    }
+  }
+</style>

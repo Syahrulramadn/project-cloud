@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Arial', sans-serif;
+        }
+        .form-container {
+            background-color: #fff;
+            
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .form-select, .form-control {
+            border-color: #ddd;
+            padding: 10px;
+        }
+        .text-center .btn-custom {
+            background-color: #00B087;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+        .text-center .btn-custom:hover {
+            background-color: #009370;
+        }
+        .form-title {
+            color: #262626;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+
+    <title>Tambah Metode Pembayaran | Aprilion Printing</title>
+</head>
+<body>
+    <!-- sidebar start -->
+    {% include 'sidebar_admin.html' %}
+    <!-- sidebar end -->
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h3 class="form-title">Tambah Metode Pembayaran</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="metodePembayaran" class="form-label">Metode Pembayaran</label>
+                            <select class="form-select" id="metodePembayaran" name="metodePembayaran" required>
+                                <option value="">Pilih Metode Pembayaran</option>
+                                <option value="BANK">BANK</option>
+                                <option value="E-Wallet">E-Wallet</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="jenisPembayaran" class="form-label">Jenis Pembayaran</label>
+                            <select class="form-select" id="jenisPembayaran" name="jenisPembayaran" required>
+                                <option value="">Pilih Jenis Pembayaran</option>
+                                <optgroup label="Bank">
+                                    <option value="BRI">BRI</option>
+                                    <option value="BCA">BCA</option>
+                                    <option value="SeaBank">SEABANK</option>
+                                    <option value="BTN">BTN</option>
+                                    <option value="BSI">BSI</option>
+                                </optgroup>
+                                <optgroup label="E-Wallet">
+                                    <option value="Dana">DANA</option>
+                                    <option value="Ovo">OVO</option>
+                                    <option value="ShopeePay">SHOPEEPAY</option>
+                                    <option value="GoPay">GOPAY</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nomorPembayaran" class="form-label">Nomor Pembayaran</label>
+                            <input type="number" class="form-control" id="nomorPembayaran" name="nomorPembayaran" required placeholder="Masukkan nomor pembayaran">
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-custom w-100">Tambah Pembayaran</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>

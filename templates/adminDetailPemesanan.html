@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Detail Pemesanan | Aprilion Printing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+      :root {
+        --gold: #ffd700;
+        --dark-gray: #262626;
+        --light-gray: #e9e9e9;
+      }
+      .order-details-container {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 
+          0 15px 25px rgba(0,0,0,0.1),
+          0 10px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+        padding: 40px;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+      }
+      .info-label {
+        position: relative;
+        color: var(--dark-gray);
+        opacity: 0.7;
+        font-weight: 600;
+        text-align: left;
+        padding-right: 10px;
+      }
+      .info-label::after {
+        content: ':';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .info-value {
+        color: var(--dark-gray);
+        font-weight: 500;
+        text-align: left;
+      }
+      .card {
+        border: none;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+      }
+      .card-header {
+        background: var(--gold);
+        color: var(--dark-gray);
+        font-weight: bold;
+        padding: 15px;
+        border-bottom: 3px solid rgba(0,0,0,0.1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .btn-custom {
+        background: var(--gold);
+        color: var(--dark-gray);
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      }
+      .btn-custom:hover {
+        background: var(--dark-gray);
+        color: var(--gold);
+        transform: translateY(-2px);
+      }
+      .status-badge {
+        background: var(--gold);
+        color: var(--dark-gray);
+        padding: 0.5em 0.8em;
+        border-radius: 20px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="order-details-container">
+        <h1 class="text-center mb-5" style="color: var(--dark-gray); font-weight: bold;">
+          Detail Pemesanan
+        </h1>
+
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-header d-flex align-items-center">
+                <i class="bi bi-box-seam me-2"></i>
+                Informasi Pesanan
+              </div>
+              <div class="card-body">
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Nama Produk</div>
+                  <div class="col-7 info-value">{{ order.nama_produk }}</div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Ukuran</div>
+                  <div class="col-7 info-value">{{ order.ukuran }}</div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Jumlah</div>
+                  <div class="col-7 info-value">{{ order.jumlah }}</div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Harga per Satuan</div>
+                  <div class="col-7 info-value">Rp. {{ "{:,}".format(order.harga_per_satuan) }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-5 info-label">Total Biaya</div>
+                  <div class="col-7 info-value" style="color: var(--gold); font-weight: bold;">
+                    Rp. {{ "{:,}".format(order.total_biaya) }}
+                  </div>
+                </div>
+
+                {% if order.desain %}
+                <div class="mt-3">
+                  <a href="{{ url_for('static', filename='uploads/' + order.desain) }}" 
+                     class="btn btn-custom w-100" download>
+                    <i class="bi bi-download me-2"></i>Unduh Desain
+                  </a>
+                </div>
+                {% endif %}
+
+                <hr class="my-3">
+
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Tanggal Pemesanan</div>
+                  <div class="col-7 info-value">{{ order.tanggal_pemesanan.strftime('%d %B %Y, %H:%M') }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-5 info-label">Status</div>
+                  <div class="col-7">
+                    <span class="status-badge">{{ order.status }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header d-flex align-items-center">
+                <i class="bi bi-person-circle me-2"></i>
+                Informasi Pelanggan
+              </div>
+              <div class="card-body">
+                <div class="row mb-2">
+                  <div class="col-4 info-label">Nama</div>
+                  <div class="col-8 info-value">{{ user.name }}</div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-4 info-label">Email</div>
+                  <div class="col-8 info-value">{{ user.email }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-4 info-label">Telepon</div>
+                  <div class="col-8 info-value">{{ user.phone }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <i class="bi bi-info-circle me-2"></i>
+                Detail Tambahan
+              </div>
+              <div class="card-body">
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Opsi Pengiriman</div>
+                  <div class="col-7 info-value">{{ order.opsi_pengiriman }}</div>
+                </div>
+
+                {% if order.opsi_pengiriman == 'Antar ke lokasi' %}
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Alamat</div>
+                  <div class="col-7 info-value">{{ order.alamat }}</div>
+                </div>
+                {% endif %}
+
+                <div class="row mb-2">
+                  <div class="col-5 info-label">Keterangan</div>
+                  <div class="col-7 info-value">{{ order.keterangan or 'Tidak ada keterangan tambahan' }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-5 info-label">Metode Pembayaran</div>
+                  <div class="col-7 info-value">{{ order.metode_pembayaran }}</div>
+                </div>
+
+                <div class="row mt-3">
+                  <div class="col-5 info-label">Bukti Pembayaran</div>
+                  <div class="col-7">
+                    {% if order.bukti_pembayaran %}
+                    <a href="{{ url_for('static', filename='bukti_pembayaran/' + order.bukti_pembayaran) }}" 
+                       class="btn btn-custom btn-sm">
+                      <i class="bi bi-eye me-2"></i>Lihat Bukti
+                    </a>
+                    {% else %}
+                    <span class="text-danger">Belum Diupload</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="{{ url_for('adminDaftarPemesanan') }}" class="btn btn-custom px-4">
+            <i class="bi bi-arrow-left me-2"></i>Kembali ke Riwayat Pemesanan
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

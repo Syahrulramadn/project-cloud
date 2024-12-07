@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Pemesanan Produk | Aprilion Printing</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link href="/static/style.css" rel="stylesheet" />
+    <style>
+      .container-custom {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek shadow */
+      }
+
+      .produk-detail img {
+        width: 100%;
+        height: 300px;
+        object-fit: contain;
+        border-radius: 8px;
+        background: #f1f1f1;
+        padding: 1rem;
+      }
+
+      .produk-detail h2 {
+        margin-top: 20px;
+        font-size: 24px;
+        color: #333;
+      }
+
+      .produk-detail p {
+        color: #555;
+        font-size: 16px;
+        line-height: 1.5;
+        text-align: justify;
+      }
+
+      .form-pemesanan input,
+      .form-pemesanan select,
+      .form-pemesanan button {
+        margin-bottom: 1rem;
+      }
+
+      #harga {
+        font-weight: bold;
+        color: #262626;
+        margin-bottom: 1rem;
+      }
+
+      .btn-success {
+        background-color: #ffd700;
+        color: #262626;
+        font-weight: 500;
+        transition: transform 0.3s ease;
+        border: none;
+        padding: 0.5rem 2rem;
+      }
+      .btn-success:hover {
+        background-color: #198754;
+        color: #e9e9e9;
+        transform: scale(1.05);
+        border: none;
+      }
+      #form-alamat {
+        display: none; /* Sembunyikan secara default */
+      }
+
+      /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+    </style>
+  </head>
+
+  <body style="background-color: #f8f9fa">
+    <!-- header start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+        role="alert"
+      >
+        {% if category == 'success' %}
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {% elif category == 'danger' %}
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% elif category == 'warning' %}
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+    <div class="container-custom my-5">
+      <h1 class="text-center mb-4">Pesan Produk</h1>
+
+      <div class="row g-4">
+        <div class="produk-detail text-start">
+          <!-- <a href="/produk" class="btn btn-primary p-2"
+            ><i class="bi bi-chevron-left"></i>Kembali ke Halaman Produk</a
+          > -->
+        </div>
+        <!-- Bagian Kiri: Gambar, Nama, dan Deskripsi Produk -->
+        <div class="col-md-6">
+          <div class="produk-detail text-center">
+            <img
+              src="{{ url_for('static', filename='assets/imgProduk/' + produk['photo']) }}"
+              alt="{{ produk['nama_produk'] }}"
+            />
+            <h2>{{ produk['nama_produk'] }}</h2>
+            <p>{{ produk['deskripsi'] }}</p>
+          </div>
+        </div>
+
+        <!-- Bagian Kanan: Form Pemesanan -->
+        <div class="col-md-6">
+          <div class="form-pemesanan">
+            <form
+              action="{{ url_for('pemesanan', produk_id=produk['_id']) }}"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <!-- Hidden field untuk nama produk -->
+              <input
+                type="hidden"
+                name="nama_produk"
+                value="{{ produk['nama_produk'] }}"
+              />
+
+              <!-- Pilihan ukuran -->
+              <label for="ukuran" class="form-label">Pilih Ukuran</label>
+              <select
+                name="ukuran"
+                id="ukuran"
+                class="form-select"
+                required
+                onchange="updateHarga()"
+              >
+                <option value="">Pilih Ukuran</option>
+                {% for dus in produk['dus_harga'] %}
+                <option
+                  value="{{ dus['ukuran'] }}"
+                  data-harga="{{ dus['hargaPcs']|int }}"
+                >
+                  {{ dus['ukuran'] }}
+                </option>
+                {% endfor %}
+              </select>
+
+              <!-- Harga sesuai ukuran -->
+              <div id="harga">Harga: Rp. 0</div>
+
+              <!-- Input jumlah -->
+              <label for="jumlah" class="form-label">Jumlah Pemesanan</label>
+              <input
+                type="number"
+                name="jumlah"
+                id="jumlah"
+                class="form-control"
+                min="1"
+                required
+              />
+
+              <!-- Input file desain -->
+              <label for="desain" class="form-label">Upload Desain</label>
+              <input
+                type="file"
+                name="desain"
+                id="desain"
+                class="form-control"
+                accept=".png, .jpg, .jpeg"
+                required
+              />
+
+              <!-- Input keterangan -->
+              <label for="keterangan" class="form-label"
+                >Keterangan (Opsional)</label
+              >
+              <input
+                type="text"
+                name="keterangan"
+                id="keterangan"
+                class="form-control"
+              />
+
+              <!-- Pilihan opsi pengiriman -->
+              <label for="opsi_pengiriman" class="form-label"
+                >Opsi Pengiriman</label
+              >
+              <select
+                name="opsi_pengiriman"
+                id="opsi_pengiriman"
+                class="form-select"
+                required
+              >
+                <option value="">Pilih Opsi Pengiriman</option>
+                <option value="Ambil di tempat">Ambil di tempat</option>
+                <option value="Antar ke lokasi">Antar ke lokasi</option>
+              </select>
+
+              <!-- Form input alamat (default disembunyikan) -->
+              <div id="form-alamat" class="mt-3">
+                <label for="alamat" class="form-label">Alamat Pengiriman</label>
+                <textarea class="form-control" placeholder="Masukkan alamat lengkap" id="alamat" name="alamat" ></textarea>
+                <!-- <input
+                  type="text"
+                  name="alamat"
+                  id="alamat"
+                  class="form-control"
+                  placeholder="Masukkan alamat lengkap"
+                /> -->
+              </div>
+
+              <!-- Pilihan metode pembayaran -->
+              <label for="metode_pembayaran" class="form-label"
+                >Metode Pembayaran</label
+              >
+              <select
+                name="metode_pembayaran"
+                id="metode_pembayaran"
+                class="form-select"
+                required
+              >
+                <option value="">Pilih Metode Pembayaran</option>
+                {% for metode in metode_pembayaran %}
+                <option
+                  value="{{ metode['jenisPembayaran'] }} - {{ metode['nomorPembayaran']
+            }}"
+                >
+                  {{ metode['jenisPembayaran'] }} - {{ metode['nomorPembayaran']
+                  }}
+                </option>
+                {% endfor %}
+              </select>
+
+              <!-- Tombol submit -->
+
+              <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-success">
+                  Pesan Sekarang <i class="bi bi-cart3"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashContainer = document.querySelector(
+          ".flash-messages-container"
+        );
+        const flashAlerts = document.querySelectorAll(".flash-alert");
+
+        if (flashContainer && flashAlerts.length > 0) {
+          // Tampilkan container dan alert
+          setTimeout(() => {
+            flashContainer.classList.add("show");
+
+            flashAlerts.forEach((alert, index) => {
+              setTimeout(() => {
+                alert.classList.add("show", "visible");
+              }, index * 200);
+            });
+          }, 100);
+
+          // Sembunyikan alert
+          flashAlerts.forEach((alert) => {
+            setTimeout(() => {
+              alert.classList.remove("show", "visible");
+
+              setTimeout(() => {
+                flashContainer.classList.remove("show");
+              }, 500);
+            }, 5000);
+          });
+        }
+      });
+      document
+        .getElementById("opsi_pengiriman")
+        .addEventListener("change", function () {
+          const formAlamat = document.getElementById("form-alamat");
+          if (this.value === "Antar ke lokasi") {
+            formAlamat.style.display = "block"; // Tampilkan form alamat
+          } else {
+            formAlamat.style.display = "none"; // Sembunyikan form alamat
+          }
+        });
+      function updateHarga() {
+        const selectUkuran = document.getElementById("ukuran");
+        const hargaDisplay = document.getElementById("harga");
+        const selectedOption = selectUkuran.options[selectUkuran.selectedIndex];
+        const harga = selectedOption.getAttribute("data-harga");
+        // hargaDisplay.textContent = `Harga: Rp ${Number(harga).toLocaleString(
+        //   "id-ID"
+        // )}`;
+        if (!harga) {
+          // Jika ukuran belum dipilih
+          hargaDisplay.textContent = "Harga: Rp. 0";
+        } else {
+          // Menampilkan harga sesuai ukuran yang dipilih
+          hargaDisplay.textContent = `Harga: Rp. ${Number(harga).toLocaleString(
+            "id-ID"
+          )}`;
+        }
+      }
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

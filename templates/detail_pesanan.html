@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Detail Pesanan | Aprilion Printing</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link href="/static/style.css" rel="stylesheet" />
+    <style>
+      :root {
+        --primary-color: #ffd700;
+        --secondary-color: #262626;
+        --light-color: #f8fafc;
+        --text-color: #333;
+      }
+
+      .detail-pesanan {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        /* background: linear-gradient(135deg, var(--light-color) 0%, #e9ecef 100%); */
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .order-container {
+        max-width: 700px;
+        width: 100%;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .order-header {
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .order-header i {
+        margin-right: 15px;
+        font-size: 1.5rem;
+      }
+
+      .order-content {
+        padding: 30px;
+      }
+
+      .order-details {
+        background-color: var(--light-color);
+        border-radius: 10px;
+        padding: 20px;
+      }
+
+      .order-row {
+        display: flex;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 10px;
+      }
+
+      .order-row:last-child {
+        border-bottom: none;
+      }
+
+      .order-label {
+        font-weight: 600;
+        color: var(--secondary-color);
+        flex: 0 0 50%;
+      }
+
+      .order-value {
+        color: var(--text-color);
+        flex: 0 0 50%;
+      }
+
+      .order-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .custom-btn {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .custom-btn:hover {
+        background-color: #ffec3d;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (max-width: 576px) {
+        .order-container {
+          margin: 0 10px;
+        }
+        .order-content {
+          padding: 15px;
+        }
+        .order-row {
+          flex-direction: column;
+        }
+        .order-label,
+        .order-value {
+          width: 100%;
+          margin-bottom: 5px;
+        }
+      }
+
+      /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+        role="alert"
+      >
+        {% if category == 'success' %}
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {% elif category == 'danger' %}
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% elif category == 'warning' %}
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <div class="detail-pesanan">
+      <div class="order-container">
+        <div class="order-header">
+          <i class="bi bi-box-fill"></i>
+          <h1 class="mb-0">Detail Pesanan</h1>
+        </div>
+
+        <div class="order-content">
+          <div class="order-details">
+            <div class="order-row">
+              <span class="order-label">Nama Produk</span>
+              <span class="order-value">{{ order['nama_produk'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Ukuran</span>
+              <span class="order-value">{{ order['ukuran'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Harga per Satuan</span>
+              <span class="order-value"
+                >Rp. {{ "{:,}".format(order['harga_per_satuan']|int) }}</span
+              >
+            </div>
+            <div class="order-row">
+              <span class="order-label">Jumlah</span>
+              <span class="order-value">{{ order['jumlah'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Total Biaya</span>
+              <span class="order-value"
+                >Rp. {{ "{:,}".format(order['total_biaya']|int) }}</span
+              >
+            </div>
+            <div class="order-row">
+              <span class="order-label">Desain</span>
+              <span class="order-value">
+                {% if order['desain'] %}
+                <a
+                  href="{{ url_for('static', filename='uploads/' + order['desain']) }}"
+                  target="_blank"
+                  class="custom-btn"
+                >
+                  <i class="bi bi-eye-fill"></i> Lihat Desain
+                </a>
+                {% else %} Tidak ada desain {% endif %}
+              </span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Keterangan</span>
+              <span class="order-value">{{ order['keterangan'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Opsi Pengiriman</span>
+              <span class="order-value">{{ order['opsi_pengiriman'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Alamat Pengiriman</span>
+              <span class="order-value">
+                {% if order['opsi_pengiriman'] == 'Antar ke lokasi' %} {{
+                order['alamat'] }} {% else %} - {% endif %}
+              </span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Metode Pembayaran</span>
+              <span class="order-value">{{ order['metode_pembayaran'] }}</span>
+            </div>
+            <div class="order-row">
+              <span class="order-label">Tanggal Pemesanan</span>
+              <span class="order-value"
+                >{{ order['tanggal_pemesanan'].strftime('%d-%m-%Y')
+                }}</span
+              >
+            </div>
+            <div class="order-row">
+              <span class="order-label">Status</span>
+              <span class="order-value">{{ order['status'] }}</span>
+            </div>
+          </div>
+          <!-- Form untuk Unggah Bukti Transfer -->
+          <form
+            action="{{ url_for('upload_bukti', order_id=order['_id']) }}"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <div class="form-group mt-4 mb-2">
+              <label for="bukti_pembayaran">Unggah Bukti Pembayaran:</label>
+              <input
+                type="file"
+                name="bukti_pembayaran"
+                id="bukti_pembayaran"
+                class="form-control"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Unggah</button>
+          </form>
+
+          <!-- <div class="order-actions">
+            <a href="{{ url_for('home') }}" class="custom-btn">
+              <i class="bi bi-house-door-fill"></i> Beranda
+            </a>
+            <a href="{{ url_for('riwayat_pemesanan') }}" class="custom-btn">
+              <i class="bi bi-card-checklist"></i> Riwayat
+            </a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashContainer = document.querySelector(
+          ".flash-messages-container"
+        );
+        const flashAlerts = document.querySelectorAll(".flash-alert");
+
+        if (flashContainer && flashAlerts.length > 0) {
+          // Tampilkan container dan alert
+          setTimeout(() => {
+            flashContainer.classList.add("show");
+
+            flashAlerts.forEach((alert, index) => {
+              setTimeout(() => {
+                alert.classList.add("show", "visible");
+              }, index * 200);
+            });
+          }, 100);
+
+          // Sembunyikan alert
+          flashAlerts.forEach((alert) => {
+            setTimeout(() => {
+              alert.classList.remove("show", "visible");
+
+              setTimeout(() => {
+                flashContainer.classList.remove("show");
+              }, 500);
+            }, 5000);
+          });
+        }
+      });
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

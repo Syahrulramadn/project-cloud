@@ -1,0 +1,458 @@
+/* styles.css */
+* {
+  margin: 0;
+  padding: 0;
+  
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Hilangkan scroll horizontal */
+  height: 100%;
+}
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #1e40af;
+  --background-color: #f8fafc;
+}
+
+
+
+/* Pastikan elemen berada di tengah */
+.navbar {
+  padding: 0;
+}
+.navbar-nav {
+  align-items: center;
+  padding: 0;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  
+}
+
+.nama-usaha{
+  font-size: 1.5rem;
+}
+.nama-usaha span{
+  color: #ffd700;
+  font-style: italic;
+}
+
+.navbar .form-control {
+  height: 38px; /* Samakan dengan tombol */
+}
+
+
+
+/* Hilangkan margin bawaan */
+.navbar .form-control,
+.navbar .btn {
+  margin: 0;
+}
+/* Navbar Link Styling */
+.navbar .nav-link {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  padding: 0rem 1rem; /* Memberikan jarak sekitar teks */
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; /* Posisi garis tepat di bawah teks */
+  left: 50%; /* Start di tengah */
+  width: 0%; /* Garis tidak terlihat pada awalnya */
+  height: 2px; /* Tebal garis */
+  background-color: #ffd700; /* Warna garis */
+  transform: translateX(-50%); /* Posisi dari tengah */
+  transition: width 0.3s ease; /* Animasi lebar garis */
+}
+
+ /* Ubah warna teks saat hover */
+/* .navbar .nav-item .nav-link:hover {
+  color: #e9e9e9;
+} */
+
+.navbar .nav-link:hover::after {
+  width: 60%; /* Garis akan meluas saat hover */
+}
+
+
+
+
+
+body {
+  background-color: var(--background-color);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.image-placeholder {
+  position: relative;
+  background: linear-gradient(rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+  background-image: url(/static/gambar/login.jpg);
+  background-size: cover;
+  /* background-position: center; */
+  position: relative;
+  overflow: hidden;
+}
+
+.image-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(45deg, rgba(111, 111, 111, 0.1), rgba(111, 111, 111, 0.1));
+  
+  z-index: 1;
+}
+
+
+.form-container, .register-form {
+  max-width: 400px;
+  width: 90%;
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.form-container h2 {
+  color: #1e293b;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  color: #475569;
+  font-weight: 500;
+}
+
+.form-control {
+  border: 2px solid #e2e8f0;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-1px);
+}
+
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+  background-color: #fef2f2;
+  color: #991b1b;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.login-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+/* @media (max-width: 991.98px) {
+  .form-container {
+      padding: 1.5rem;
+  }
+} */
+
+/* Common styles for both pages */
+/* .login-container,
+.register-container {
+  min-height: 100vh;
+} */
+
+.image-placeholder {
+  
+  background-size: cover;
+  background-color: #f0f0f0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #dee2e6;
+}
+
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(74, 74, 74, 0.25);
+  border-color: #4a4a4a;
+}
+
+/* Button styles */
+.btn-login,
+.btn-register {
+  padding: 0.75rem;
+  border-radius: 8px;
+  background-color: #4a4a4a;
+  border: none;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.btn-login:hover,
+.btn-register:hover {
+  background-color: #333333;
+}
+
+/* Link styles */
+.login-link,
+.register-link {
+  color: blue;
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
+}
+
+.login-link:hover,
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 991.98px) {
+  .image-placeholder {
+    display: none;
+  }
+}
+
+p a,button a {
+  text-decoration: none;
+}
+
+.carousel-inner,
+.carousel-item img {
+  margin: 0; /* Menghapus margin */
+  padding: 0; /* Menghapus padding */
+}
+
+.carousel-item img {
+  width: 100%; /* Gambar memenuhi lebar penuh */
+  height: 100%; /* Sesuaikan tinggi ke pembungkus */
+  object-fit: cover; /* Memastikan gambar menutupi area pembungkus tanpa distorsi */
+}
+
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.footer {
+  background-color: #212529;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap; /* Membungkus kolom jika layar kecil */
+  justify-content: center; /* Menengahkan semua kolom */
+  gap: 20px; /* Jarak antar kolom */
+  max-width: 1200px; /* Lebar maksimum */
+  margin: 0 auto; /* Tengah secara horizontal */
+  border-bottom: 1px solid white;
+  padding: 20px 15px; /* Tambahan padding */
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap; /* Membungkus kolom jika ruang tidak cukup */
+  justify-content: space-around; /* Spasi antar kolom */
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-col {
+  flex: 1; /* Membuat kolom fleksibel */
+  min-width: 300px; /* Lebar minimum setiap kolom */
+  display: flex;
+  flex-direction: column; /* Susunan vertikal */
+  align-items: center; /* Menengahkan isi secara horizontal */
+  padding: 10px;
+  color: #d3d3d3; /* Warna teks */
+}
+
+.footer-col h6 {
+  color: #e9e9e9; /* Warna teks */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.address {
+  display: flex;
+  align-items: start;
+}
+
+.address i {
+  font-size: 1.5rem; /* Ukuran ikon */
+  margin-right: 10px; /* Jarak antara ikon dan teks */
+  color: white; /* Warna ikon */
+}
+
+.address p {
+  margin: 0; /* Hilangkan margin default */
+  font-size: 14px; /* Ukuran teks */
+  line-height: 1.5; /* Jarak baris untuk teks panjang */
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0px; /* Jarak antar metode pembayaran */
+}
+
+.payment-method img {
+  margin-right: 10px; /* Spasi antara ikon dan teks */
+  max-width: 4rem; /* Pastikan ukuran gambar tetap */
+  height: auto;
+  object-fit: contain;
+}
+
+.payment-method p {
+  margin: 0; /* Hilangkan margin default pada paragraf */
+  font-size: 1rem; /* Ukuran teks */
+}
+
+.footer-col p,
+.footer-col a {
+  margin: 5px 0;
+  text-align: justify;
+  text-decoration: none;
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center; /* Menengahkan ikon dan teks secara vertikal */
+  gap: 8px; /* Jarak antara ikon dan teks */
+}
+
+.contact-item i {
+  font-size: 1rem; /* Ukuran ikon */
+}
+
+.contact-item p {
+  margin: 0; /* Hilangkan margin default pada paragraf */
+}
+
+.footer-copyright {
+  background-color: #212529;
+  color: #ffff; /* Warna latar copyright */
+  text-align: center; /* Teks rata tengah */
+  padding: 1rem 0;
+  font-size: 1rem;
+}
+
+.footer-copyright > p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.footer-copyright .powered {
+  color: #ffd700;
+  text-decoration: none;
+}
+
+/* Media Queries untuk Responsivitas */
+@media screen and (max-width: 992px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-col {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .footer-container {
+    padding: 10px;
+  }
+
+  .footer-col {
+    min-width: 100%;
+    padding: 5px;
+  }
+
+  .contact-item {
+    flex-direction: row;
+    text-align: center;
+  }
+
+  .contact-item i {
+    margin-bottom: 5px;
+  }
+
+  .payment-method {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
+
+  .payment-method img {
+    margin-right: 5px;
+    margin-bottom: 0;
+  }
+
+  .footer-copyright {
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+  }
+}
+
+/* Tambahan Hover dan Aksesibilitas */
+.contact-item a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-item a:hover {
+  color: #ffd700; /* Warna emas saat hover */
+}
+

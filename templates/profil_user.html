@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Profil Saya | Aprilion Printing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+    <style>
+        .profile-container {
+            max-width: 500px;
+            margin: 50px auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        .profile-container:hover {
+            transform: scale(1.02);
+        }
+        .profile-header {
+            background-color: #262626;
+            color: #ffd700;
+            text-align: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+        .profile-pic-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .profile-pic {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ffd700;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .edit-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: transparent;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            transition: all 0.3s ease;
+        }
+        .edit-button:hover {
+            background-color: #ffd700;
+            color: #262626;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+        }
+        .profile-info-wrapper {
+            width: 100%;
+            max-width: 350px;
+        }
+        .profile-info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            border-left: 4px solid #ffd700;
+            border-right: 4px solid #ffd700;
+        }
+        .profile-info-item:hover {
+            background-color: #f4f4f4;
+        }
+        .profile-info-item i {
+            color: #262626;
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+        .profile-info-item .info-content {
+            flex-grow: 1;
+        }
+        .profile-info-item .info-content p {
+            margin: 0;
+            color: #262626;
+        }
+        .profile-info-item .info-content p:first-child {
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+    </style>
+</head>
+<body>
+    <!-- header start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div
+          class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+          role="alert"
+        >
+          {% if category == 'success' %}
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {% elif category == 'danger' %}
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {% elif category == 'warning' %}
+          <i class="bi bi-exclamation-circle-fill me-2"></i>
+          {% endif %} {{ message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+          ></button>
+        </div>
+        {% endfor %} {% endif %} {% endwith %}
+      </div>
+    <div class="profile-container">
+        <div class="profile-header">
+            <!-- Tombol Edit -->
+            <button class="btn edit-button" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
+                <i class="bi bi-pencil-square"></i>
+            </button>
+            <h2>Profil Saya</h2>
+        </div>
+
+        <!-- Gambar Profil -->
+        <div class="profile-pic-container">
+            <img src="{{ url_for('static', filename=photo_filename) }}" alt="Foto Profil" class="profile-pic">
+        </div>
+
+        <!-- Informasi Profil -->
+        <div class="profile-info">
+            <div class="profile-info-wrapper">
+                <div class="profile-info-item">
+                    <i class="bi bi-person"></i>
+                    <div class="info-content">
+                        <p>Nama</p>
+                        <p>{{ user.name }}</p>
+                    </div>
+                </div>
+                <div class="profile-info-item">
+                    <i class="bi bi-envelope"></i>
+                    <div class="info-content">
+                        <p>Email</p>
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+                <div class="profile-info-item">
+                    <i class="bi bi-telephone"></i>
+                    <div class="info-content">
+                        <p>No. Handphone</p>
+                        <p>{{ user.phone }}</p>
+                    </div>
+                </div>
+                <div class="profile-info-item">
+                  <i class="bi bi-calendar-date"></i>
+                  <div class="info-content">
+                      <p>Tanggal Lahir</p>
+                      <p>{{ user.tanggal_lahir }}</p>
+                  </div>
+              </div>
+                <div class="profile-info-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <div class="info-content">
+                        <p>Alamat</p>
+                        <p>{{ user.address }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Profil -->
+    <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateProfileModalLabel">Edit Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">No HP</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ user.phone }}" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                          <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" value="{{ user.tanggal_lahir}}">
+                      </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Alamat</label>
+                            <!-- <input type="text-area" class="form-control" id="address" name="address" value="{{ user.address }}"> -->
+                            <textarea class="form-control" placeholder="" id="address" name="address" >{{ user.address }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="photo" class="form-label">Foto Profil</label>
+                            <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="background-color: #ffd700; border-color: #ffd700; color: #262626;">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const flashContainer = document.querySelector(
+            ".flash-messages-container"
+          );
+          const flashAlerts = document.querySelectorAll(".flash-alert");
+  
+          if (flashContainer && flashAlerts.length > 0) {
+            // Tampilkan container dan alert
+            setTimeout(() => {
+              flashContainer.classList.add("show");
+  
+              flashAlerts.forEach((alert, index) => {
+                setTimeout(() => {
+                  alert.classList.add("show", "visible");
+                }, index * 200);
+              });
+            }, 100);
+  
+            // Sembunyikan alert
+            flashAlerts.forEach((alert) => {
+              setTimeout(() => {
+                alert.classList.remove("show", "visible");
+  
+                setTimeout(() => {
+                  flashContainer.classList.remove("show");
+                }, 500);
+              }, 5000);
+            });
+          }
+        });
+      </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

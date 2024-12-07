@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta property="og:title" content="Aprilion Printing" />
+    <meta property="og:description" content="Aprilion Printing adalah percetakan berkualitas dengan harga terjangkau" />
+    <meta property="og:image" content="{{url_for('static', filename='gambar/logo.png')}}" />
+    <link rel="shortcut icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    <link rel="icon" href="../static/gambar/logo.png" type="image/x-icon" />
+    
+    <title>Riwayat Pemesanan | Aprilion Printing</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="../static/style.css" />
+    <style>
+      :root {
+        --primary-color: #4a6cf7;
+        --secondary-color: #6c757d;
+        --bg-light: #f8f9fa;
+        --text-dark: #333;
+      }
+
+      
+
+      .order-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .order-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 24px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .order-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background-color: var(--bg-light);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+      }
+
+      .order-body {
+        display: flex;
+        padding: 20px;
+      }
+
+      .order-details {
+        flex-grow: 1;
+        padding-right: 20px;
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .order-cost {
+        width: 215px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+      }
+
+      .status-menunggu {
+        background-color: rgb(177, 177, 177);
+        color: black;
+      }
+      .status-dikirim {
+        background-color: #2196f3;
+        color: black;
+      }
+      .status-diproses {
+        background-color: #ffc107;
+        color: #212529;
+      }
+
+      .status-selesai {
+        background-color: #28a745;
+        color: white;
+      }
+
+      .btn-custom {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+      }
+
+      .btn-custom:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+        background-color: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      }
+
+      .detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+        position: relative;
+      }
+
+      /* .detail-item i {
+        margin-right: 12px;
+        color: var(--primary-color);
+        width: 24px;
+        text-align: center;
+      } */
+
+      .detail-label {
+        display: inline-block;
+        width: 150px;
+        position: relative;
+        font-weight: 600;
+        margin-right: 10px;
+      }
+
+      .detail-label::after {
+        content: ":";
+        position: absolute;
+        right: -5px;
+        top: 0;
+      }
+
+      .total-price {
+        color: var(--primary-color);
+        font-weight: 700;
+        font-size: 1.75rem;
+      }
+      
+
+      @media (min-width: 768px) and (max-width: 1023px){
+        .order-body {
+          flex-direction: column;
+        }
+
+        .order-details {
+          border-right: none;
+          padding-right: 0;
+          margin-bottom: 20px;
+        }
+        .detail-label {
+          width: 140px;
+        }
+
+      }
+
+      @media (max-width: 767px) {
+        .order-body {
+          flex-direction: column;
+        }
+
+        .order-details {
+          border-right: none;
+          padding-right: 0;
+          margin-bottom: 20px;
+        }
+
+        .detail-label {
+          font-weight: 500;
+          font-size: 14px;
+          width: 120px;
+        }
+        .detail-item{
+          font-size: 14px;
+        }
+        .status-badge{
+          font-size: 500;
+          padding: 4px 8px;
+          font-size: 11px;
+        }
+        .id-pemesanan {
+          font-size: 14px;
+        }
+       
+      
+      }
+      
+      /* Custom Flash Messages Styling */
+      .flash-messages-container {
+        position: fixed;
+        top: 20px;
+        right: -400px;
+        width: 350px;
+        z-index: 1100;
+        transition: right 0.5s ease-in-out;
+      }
+
+      .flash-messages-container.show {
+        right: 20px;
+      }
+
+      .flash-alert {
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(50px);
+        transition: all 0.5s ease-in-out;
+      }
+
+      .flash-alert.visible {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      .flash-alert.alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+      }
+
+      .flash-alert.alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+      }
+
+      .flash-alert.alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+        color: #856404;
+      }
+
+      /* Style tombol */
+      .status-filter-container .btn-group {
+        display: flex;
+        flex-wrap: wrap; /* Membuat tombol berpindah baris jika ruang tidak cukup */
+        justify-content: center; /* Menyelaraskan tombol di tengah */
+        gap: 1rem; /* Memberikan jarak antar tombol */
+      }
+
+      .status-filter-container .btn-group .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Menyelaraskan konten tombol di tengah */
+        padding: 10px 20px;
+        /* border-radius: 8px; */
+        transition: all 0.3s ease;
+        font-size: 0.9rem; /* Ukuran font lebih kecil untuk responsif */
+      }
+
+      .status-filter-container .btn-group .btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        box-shadow: 0 4px 10px rgba(74, 108, 247, 0.3);
+      }
+
+      .status-filter-container .btn-group .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      
+    </style>
+  </head>
+  <body>
+    <!-- header start -->
+    {% include 'navbar.html' %}
+    <!-- navbar end -->
+    <!-- Flash Messages Container -->
+    <div class="flash-messages-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert flash-alert alert-{{ category }} alert-dismissible fade"
+        role="alert"
+      >
+        {% if category == 'success' %}
+        <i class="bi bi-check-circle-fill me-2"></i>
+        {% elif category == 'danger' %}
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {% elif category == 'warning' %}
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        {% endif %} {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <div class="container order-container my-5">
+      <h1 class="text-center mb-5">
+        <i class="bi bi-journal-text fs-1 me-2 text-primary"></i>Riwayat
+        Pemesanan Anda
+      </h1>
+
+      <!-- Tambahkan bagian ini di dalam container order-container, tepat sebelum -->
+      <div class="status-filter-container mb-4 text-center">
+        <div class="btn-group" role="group" aria-label="Order Status Filter">
+          <button
+            type="button"
+            class="btn btn-outline-primary active"
+            data-filter="all"
+          >
+            <i class="bi bi-list-task me-2"></i>Semua Pesanan
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            data-filter="Konfirmasi"
+          >
+            <i class="bi bi-clock-fill me-2"></i>Konfirmasi
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-warning"
+            data-filter="Diproses"
+          >
+            <i class="bi bi-printer-fill me-2"></i>Diproses
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-info"
+            data-filter="Dikirim"
+          >
+            <i class="bi bi-truck me-2"></i>Dikirim
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-success"
+            data-filter="Selesai"
+          >
+            <i class="bi bi-check-circle-fill me-2"></i>Selesai
+          </button>
+        </div>
+      </div>
+
+      {% if orders %} {% for order in orders %}
+      <div class="order-card">
+        <div class="order-header">
+          <div>
+            <i class="bi bi-basket2 fs-4 me-2 text-primary"></i>
+            <strong>ID Pemesanan:</strong> <p class="id-pemesanan p-0 m-0">{{ order['_id'] }}</p>
+          </div>
+          <span
+            class="status-badge {% if order['status'] == 'Konfirmasi' %}status-menunggu{% elif order['status'] == 'Diproses' %}status-diproses{% elif order['status'] == 'Dikirim' %}status-dikirim{% elif order['status'] == 'Selesai' %}status-selesai{% endif %}"
+          >
+            <i
+              class="{% if order['status'] == 'Konfirmasi' %}fs-6 bi bi-clock-fill{% elif order['status'] == 'Diproses' %}fs-6 bi bi-printer-fill{% elif order['status'] == 'Dikirim' %}fs-6 bi bi-truck{% elif order['status'] == 'Selesai' %}fs-6 bi bi-check-circle-fill{% endif %} me-2"
+            ></i>
+            {{ order['status'] }}
+          </span>
+        </div>
+
+        <div class="order-body">
+          <div class="order-details">
+            <h4 class="mb-4">
+              {{ order['nama_produk'] }}
+            </h4>
+
+            <div class="row">
+              <div class="col-md-6 ">
+                <div class="detail-item">
+                  <span class="detail-label">Ukuran</span>
+                  {{ order['ukuran'] }}
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Jumlah</span>
+                  {{ order['jumlah'] }}
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Desain</span>
+                  <a
+                    href="{{ url_for('static', filename='uploads/' + order['desain']) }}"
+                    target="_blank"
+                    class="text-primary"
+                  >
+                    Lihat Disini
+                  </a>
+                </div>
+                {% if order['keterangan'] %}
+                <div class="detail-item mt-3">
+                  <span class="detail-label">Keterangan</span>
+                  <em>{{ order['keterangan'] }}</em>
+                </div>
+                {% endif %}
+              </div>
+              <div class="col-md-6">
+                <div class="detail-item">
+                  <span class="detail-label">Pengiriman</span>
+                  {{ order['opsi_pengiriman'] }}
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Pembayaran</span>
+                  {{ order['metode_pembayaran'] }}
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Bukti Pembayaran</span>
+                  {% if order['bukti_pembayaran'] %}
+                  <a
+                    href="{{ url_for('static', filename='bukti_pembayaran/' + order['bukti_pembayaran']) }}"
+                    class=""
+                    target="_blank"
+                  >
+                    Lihat Disini
+                  </a>
+                  {% else %}
+                  <span class="text-warning"
+                    ><a
+                      href="{{ url_for('detail_pesanan', order_id=order['_id']) }}"
+                      class="text-danger"
+                      >Belum Diunggah</a
+                    >
+                  </span>
+                  {% endif %}
+                </div>
+                <div class="detail-item">
+                  <span class="detail-label">Tanggal</span>
+                  {{ order['tanggal_pemesanan'].strftime('%d-%m-%Y') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="order-cost mx-auto">
+            <p class="text-muted mb-2">Total Biaya</p>
+            <h3 class="total-price">
+              Rp. {{ "{:,}".format(order['total_biaya']) }}
+            </h3>
+            <!-- <div class="mt-3">
+              <a
+                href="{{ url_for('detail_pesanan', order_id=order['_id']) }}"
+                class="btn btn-outline-primary btn-custom me-2"
+              >
+                <i class="bi bi-eye-fill"></i> Detail
+              </a>
+              {% if order['status'] == 'Diproses' %}
+                            <a href="#" class="btn btn-outline-danger btn-custom">
+                                <i class="bi bi-x-circle-fill"></i> Batalkan
+                            </a>
+                            {% endif %}
+            </div> -->
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <div class="empty-state text-center">
+        <i class="bi bi-archive-fill fs-1 text-muted mb-4"></i>
+        <h3 class="text-muted mb-3">Riwayat Pesanan Kosong</h3>
+        <p class="text-muted">
+          Anda belum memiliki riwayat pemesanan. Ayo mulai berbelanja!
+        </p>
+        <a href="/produk" class="btn btn-primary mt-3">Mulai Pemesanan</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- footer start -->
+    {% include 'footer.html' %}
+    <!-- footer end -->
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const flashContainer = document.querySelector(
+          ".flash-messages-container"
+        );
+        const flashAlerts = document.querySelectorAll(".flash-alert");
+
+        if (flashContainer && flashAlerts.length > 0) {
+          // Tampilkan container dan alert
+          setTimeout(() => {
+            flashContainer.classList.add("show");
+
+            flashAlerts.forEach((alert, index) => {
+              setTimeout(() => {
+                alert.classList.add("show", "visible");
+              }, index * 200);
+            });
+          }, 100);
+
+          // Sembunyikan alert
+          flashAlerts.forEach((alert) => {
+            setTimeout(() => {
+              alert.classList.remove("show", "visible");
+
+              setTimeout(() => {
+                flashContainer.classList.remove("show");
+              }, 500);
+            }, 5000);
+          });
+        }
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Ambil semua tombol filter dan kartu pesanan
+        const filterButtons = document.querySelectorAll(
+          ".status-filter-container .btn"
+        );
+        const orderCards = document.querySelectorAll(".order-card");
+        const emptyState = document.querySelector(".empty-state");
+
+        // Tambahkan event listener ke setiap tombol
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Hapus kelas aktif dari semua tombol
+            filterButtons.forEach((btn) => btn.classList.remove("active"));
+
+            // Tambahkan kelas aktif ke tombol yang diklik
+            this.classList.add("active");
+
+            // Ambil status filter
+            const filterStatus = this.getAttribute("data-filter");
+
+            // Hitung jumlah pesanan yang terlihat
+            let visibleOrderCount = 0;
+
+            // Filter kartu pesanan
+            orderCards.forEach((card) => {
+              const orderStatus = card
+                .querySelector(".status-badge")
+                .textContent.trim();
+
+              if (filterStatus === "all" || orderStatus === filterStatus) {
+                card.style.display = "block";
+                visibleOrderCount++;
+              } else {
+                card.style.display = "none";
+              }
+            });
+
+            // Tampilkan/sembunyikan status kosong
+            if (visibleOrderCount === 0 && emptyState) {
+              emptyState.style.display = "block";
+            } else if (emptyState) {
+              emptyState.style.display = "none";
+            }
+          });
+        });
+      });
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
