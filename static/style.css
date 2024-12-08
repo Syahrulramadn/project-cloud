@@ -139,7 +139,7 @@ body {
 
 
 .form-container, .register-form {
-  max-width: 400px;
+  max-width: 450px;
   width: 90%;
   padding: 1.5rem 2rem;
   box-sizing: border-box;
@@ -247,10 +247,14 @@ body {
 }
 
 /* Responsive styles */
-@media (max-width: 991.98px) {
+@media (max-width: 744px) {
   .image-placeholder {
     display: none;
+    
+    
   }
+
+  
 }
 
 p a,button a {

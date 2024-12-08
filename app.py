@@ -229,10 +229,12 @@ def detail_pesanan(order_id):
         flash('Pesanan tidak ditemukan.', 'danger')
         return redirect(url_for('home'))
 
+    user = db.users.find_one({'_id': order['user_id']})
+
     # Ambil informasi produk berdasarkan produk_id yang ada di pesanan
     produk = db.products.find_one({'_id': ObjectId(order['produk_id'])})
 
-    return render_template('detail_pesanan.html', order=order, produk=produk)
+    return render_template('detail_pesanan.html', order=order, produk=produk, user=user)
 
 @app.route('/upload_bukti/<string:order_id>', methods=['POST'])
 @login_required(role='user')
