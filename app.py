@@ -315,31 +315,32 @@ def update_profile():
         name = request.form['name']
         email = request.form['email']
         phone = request.form['phone']
-        tanggal_lahir=request.form['tanggal_lahir']
-        address = request.form['address']
+        jenis_kelamin = request.form['jenis_kelamin']
+        tanggal_lahir = request.form['tanggal_lahir']
         photo = request.files.get('photo')
-        # # Langsung konversi tanggal ke format DD/MM/YYYY
-        # try:
-        #     tanggal_lahir = datetime.strptime(tanggal_lahir, '%Y-%m-%d').strftime('%d/%m/%Y')
-        # except ValueError:
-        #     tanggal_lahir = ''  # Jika format salah, kosongkan tanggal
+        
+        # Gunakan foto lama atau foto default
+        photo_filename = user.get('photo', 'profil_user/default.png')
 
-        # Jika tidak ada foto yang diunggah, gunakan foto default
-        photo_filename = user.get('photo', 'profil_user/default.png')  # Gunakan foto lama atau foto default
+        # Cek apakah file foto diunggah
+        if photo and photo.filename != '':
+            # Cek apakah format file diizinkan
+            if not allowed_file_admin(photo.filename):
+                flash('Format file tidak valid. Gunakan file jpg, jpeg, atau png.', 'danger')
+                return redirect(url_for('profil'))
 
-        if photo and allowed_file(photo.filename):
             # Buat folder profil_user jika belum ada
             user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(user_id))
             if not os.path.exists(user_folder):
                 os.makedirs(user_folder)
 
             # Generate nama file dengan datetime untuk menghindari duplikasi nama file
-            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')  # Format: YYYYMMDDHHMMSS
-            file_extension = os.path.splitext(photo.filename)[1]  # Mendapatkan ekstensi file
+            timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+            file_extension = os.path.splitext(photo.filename)[1]
             filename = f'{timestamp}{file_extension}'
             photo_path = os.path.join(user_folder, filename)
             photo.save(photo_path)
-            photo_filename = f'profil_user/{user_id}/{filename}'  # Simpan path relatif foto
+            photo_filename = f'profil_user/{user_id}/{filename}'
 
         # Update data pengguna di database
         db.users.update_one(
@@ -349,8 +350,8 @@ def update_profile():
                     'name': name,
                     'email': email,
                     'phone': phone,
+                    'jenis_kelamin':jenis_kelamin,
                     'tanggal_lahir': tanggal_lahir,
-                    'address': address,
                     'photo': photo_filename
                 }
             }
@@ -358,7 +359,6 @@ def update_profile():
         flash('Profil berhasil diperbarui!', 'success')
         return redirect(url_for('profil'))
 
-    return render_template('update_profile.html', user=user)
 
 @app.route('/logout')
 def logout():
@@ -694,6 +694,34 @@ def update_order_status():
         # Log the error and show a user-friendly message
         app.logger.error(f"Terjadi kesalahan saat memperbarui status pesanan: {str(e)}")
         flash('Terjadi kesalahan saat memperbarui status pesanan', 'error')
+        return redirect(url_for('adminDaftarPemesanan'))
+    
+@app.route('/hapusDataPemesanan_order/<string:order_id>', methods=['POST'])
+@login_required(role='admin')
+def hapus_data_pemesanan(order_id):
+    try:
+        # Cek apakah pesanan ada
+        order = db.orders.find_one({'_id': ObjectId(order_id)})
+        
+        if not order:
+            flash('Pesanan tidak ditemukan.', 'danger')
+            return redirect(url_for('adminDaftarPemesanan'))
+        
+        # Hapus pesanan dari database
+        result = db.orders.delete_one({'_id': ObjectId(order_id)})
+        
+        # Cek apakah penghapusan berhasil
+        if result.deleted_count > 0:
+            flash('Pesanan berhasil dihapus!', 'success')
+        else:
+            flash('Gagal menghapus pesanan.', 'error')
+        
+        return redirect(url_for('adminDaftarPemesanan'))
+    
+    except Exception as e:
+        # Log error dan tampilkan pesan kesalahan
+        app.logger.error(f"Terjadi kesalahan saat menghapus pesanan: {str(e)}")
+        flash('Terjadi kesalahan saat menghapus pesanan', 'error')
         return redirect(url_for('adminDaftarPemesanan'))
 
 # route data admin start

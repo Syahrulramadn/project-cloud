@@ -245,18 +245,20 @@
               <p>{{ user.phone }}</p>
             </div>
           </div>
+          
+          <div class="profile-info-item">
+            <i class="bi bi-gender-neuter"></i>
+            <div class="info-content">
+              <p>Jenis Kelamin</p>
+              <p>{{ user.jenis_kelamin }}</p>
+            </div>
+          </div>
+
           <div class="profile-info-item">
             <i class="bi bi-calendar-date"></i>
             <div class="info-content">
               <p>Tanggal Lahir</p>
               <p>{{ user.tanggal_lahir }}</p>
-            </div>
-          </div>
-          <div class="profile-info-item">
-            <i class="bi bi-geo-alt"></i>
-            <div class="info-content">
-              <p>Alamat</p>
-              <p>{{ user.address }}</p>
             </div>
           </div>
         </div>
@@ -313,7 +315,7 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="phone" class="form-label">No HP</label>
+                <label for="phone" class="form-label">No. Handphone</label>
                 <input
                   type="tel"
                   class="form-control"
@@ -322,7 +324,17 @@
                   value="{{ user.phone }}"
                   required
                 />
+
               </div>
+              <div class="mb-3">
+                <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+                <select class="form-select" id="jenis_kelamin" name="jenis_kelamin">
+                  <option value="">Pilih Jenis Kelamin</option>
+                  <option value="Laki-laki" {% if user.jenis_kelamin == 'Laki-laki' %}selected{% endif %}>Laki-laki</option>
+                  <option value="Perempuan" {% if user.jenis_kelamin == 'Perempuan' %}selected{% endif %}>Perempuan</option>
+              </select>
+              </div>
+
               <div class="mb-3">
                 <label for="tanggal_lahir" class="form-label"
                   >Tanggal Lahir</label
@@ -335,18 +347,6 @@
                   value="{{ user.tanggal_lahir}}"
                 />
               </div>
-              <div class="mb-3">
-                <label for="address" class="form-label">Alamat</label>
-                <!-- <input type="text-area" class="form-control" id="address" name="address" value="{{ user.address }}"> -->
-                <textarea
-                  class="form-control"
-                  placeholder=""
-                  id="address"
-                  name="address"
-                >
-{{ user.address }}</textarea
-                >
-              </div>
 
               <div class="mb-3">
                 <label for="photo" class="form-label">Foto Profil</label>
@@ -355,7 +355,7 @@
                   class="form-control"
                   id="photo"
                   name="photo"
-                  accept="image/*"
+                  accept=".jpg, .png, .jpeg"
                 />
               </div>
               <button
