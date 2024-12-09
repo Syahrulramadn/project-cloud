@@ -20,10 +20,10 @@ db = client[DB_NAME]
 
 # Inisialisasi aplikasi Flask
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'
+app.secret_key = os.urandom(24)
 users_collection = db['users']
 admins_collection = db['admins']
-cart_collection = db['cart']
+
 
 #FUNGSI VALIDASI LOGIN
 def login_required(role=None):
