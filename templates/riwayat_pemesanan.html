@@ -101,6 +101,10 @@
         background-color: #28a745;
         color: white;
       }
+      .status-dibatalkan {
+        background-color: rgb(243, 2, 2);
+        color: white;
+      }
 
       .btn-custom {
         display: inline-flex;
@@ -362,7 +366,7 @@
             <strong>ID Pemesanan:</strong> <p class="id-pemesanan p-0 m-0">{{ order['_id'] }}</p>
           </div>
           <span
-            class="status-badge {% if order['status'] == 'Konfirmasi' %}status-menunggu{% elif order['status'] == 'Diproses' %}status-diproses{% elif order['status'] == 'Dikirim' %}status-dikirim{% elif order['status'] == 'Selesai' %}status-selesai{% endif %}"
+            class="status-badge {% if order['status'] == 'Konfirmasi' %}status-menunggu{% elif order['status'] == 'Diproses' %}status-diproses{% elif order['status'] == 'Dikirim' %}status-dikirim{% elif order['status'] == 'Selesai' %}status-selesai{% elif order['status'] == 'Dibatalkan' %}status-dibatalkan{% endif %}"
           >
             <i
               class="{% if order['status'] == 'Konfirmasi' %}fs-6 bi bi-clock-fill{% elif order['status'] == 'Diproses' %}fs-6 bi bi-printer-fill{% elif order['status'] == 'Dikirim' %}fs-6 bi bi-truck{% elif order['status'] == 'Selesai' %}fs-6 bi bi-check-circle-fill{% endif %} me-2"
@@ -387,8 +391,10 @@
                   <span class="detail-label">Jumlah</span>
                   {{ order['jumlah'] }}
                 </div>
+                
                 <div class="detail-item">
                   <span class="detail-label">Desain</span>
+                  {% if order['desain'] %}
                   <a
                     href="{{ url_for('static', filename='uploads/' + order['desain']) }}"
                     target="_blank"
@@ -396,7 +402,9 @@
                   >
                     Lihat Disini
                   </a>
+                  {% else %} Tidak ada desain {% endif %}
                 </div>
+                
                 {% if order['keterangan'] %}
                 <div class="detail-item mt-3">
                   <span class="detail-label">Keterangan</span>
