@@ -88,10 +88,7 @@
         transform: translateY(-2px);
       }
       .status-badge {
-        background: var(--gold);
         color: var(--dark-gray);
-        padding: 0.5em 0.8em;
-        border-radius: 20px;
         font-weight: bold;
       }
     </style>
@@ -153,7 +150,7 @@
 
                 <div class="row mb-2">
                   <div class="col-5 info-label">Tanggal Pemesanan</div>
-                  <div class="col-7 info-value">{{ order.tanggal_pemesanan.strftime('%d %B %Y, %H:%M') }}</div>
+                  <div class="col-7 info-value">{{ order.tanggal_pemesanan.strftime('%d-%m-%Y') }}</div>
                 </div>
                 <div class="row">
                   <div class="col-5 info-label">Status</div>
