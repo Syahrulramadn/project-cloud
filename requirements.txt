@@ -9,4 +9,5 @@ MarkupSafe
 pymongo
 python-dotenv
 Werkzeug
-gunicorn
+
+
